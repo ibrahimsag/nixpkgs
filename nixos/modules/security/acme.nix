@@ -264,15 +264,8 @@ in
                 )
               );
           servicesAttr = listToAttrs services;
-          nginxAttr = {
-            nginx = {
-              after = [ "acme-selfsigned-certificates.target" ];
-              wants = [ "acme-selfsigned-certificates.target" "acme-certificates.target" ];
-            };
-          };
         in
-          servicesAttr //
-          (if config.services.nginx.enable then nginxAttr else {});
+          servicesAttr;
 
       systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
         ("acme-${cert}")
